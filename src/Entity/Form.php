@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\FormRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +27,14 @@ class Form
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $end = null;
+
+    #[ORM\OneToMany(mappedBy: 'idForm', targetEntity: Question::class, orphanRemoval: true)]
+    private Collection $idQuestions;
+
+    public function __construct()
+    {
+        $this->idQuestions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +85,36 @@ class Form
     public function setEnd(?\DateTimeInterface $end): self
     {
         $this->end = $end;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Question>
+     */
+    public function getIdQuestions(): Collection
+    {
+        return $this->idQuestions;
+    }
+
+    public function addIdQuestion(Question $idQuestion): self
+    {
+        if (!$this->idQuestions->contains($idQuestion)) {
+            $this->idQuestions->add($idQuestion);
+            $idQuestion->setIdForm($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIdQuestion(Question $idQuestion): self
+    {
+        if ($this->idQuestions->removeElement($idQuestion)) {
+            // set the owning side to null (unless already changed)
+            if ($idQuestion->getIdForm() === $this) {
+                $idQuestion->setIdForm(null);
+            }
+        }
 
         return $this;
     }

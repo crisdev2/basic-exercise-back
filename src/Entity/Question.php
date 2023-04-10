@@ -28,6 +28,10 @@ class Question
     #[ORM\OneToMany(mappedBy: 'idQuestion', targetEntity: QuestionOption::class, orphanRemoval: true)]
     private Collection $idQuestionOptions;
 
+    #[ORM\ManyToOne(inversedBy: 'idQuestions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Form $idForm = null;
+
     public function __construct()
     {
         $this->idQuestionOptions = new ArrayCollection();
@@ -100,6 +104,18 @@ class Question
                 $idQuestionOption->setIdQuestion(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIdForm(): ?Form
+    {
+        return $this->idForm;
+    }
+
+    public function setIdForm(?Form $idForm): self
+    {
+        $this->idForm = $idForm;
 
         return $this;
     }
