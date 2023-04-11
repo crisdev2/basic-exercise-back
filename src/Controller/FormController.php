@@ -4,11 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Form;
 use App\Manager\FormManager;
+use App\Service\RequestService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class FormController extends AbstractController
@@ -53,11 +53,11 @@ class FormController extends AbstractController
     
     #[Route('/api/form', name: 'api_form_new', methods: ['POST'])]
     public function new(
-        Request $request,
+        RequestService $requestService,
         FormManager $manager,
     ): JsonResponse
     {
-        $data = $request->request->all();
+        $data = $requestService->getContent();
 
         $record = $manager->save($data);
 
@@ -71,7 +71,7 @@ class FormController extends AbstractController
     public function edit(
         int $id,
         ManagerRegistry $doctrine,
-        Request $request,
+        RequestService $requestService,
         FormManager $manager,
     ): JsonResponse
     {
@@ -85,7 +85,7 @@ class FormController extends AbstractController
             ], 400);
         }
 
-        $data = $request->request->all();
+        $data = $requestService->getContent();
 
         $record = $manager->save($data, $id);
 
@@ -100,8 +100,6 @@ class FormController extends AbstractController
         int $id,
         ManagerRegistry $doctrine,
         EntityManagerInterface $entityManager,
-        Request $request,
-        FormManager $manager,
     ): JsonResponse
     {
         $record = $doctrine

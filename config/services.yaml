@@ -20,5 +20,11 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    request:
+        class: Symfony\Component\HttpFoundation\Request
+
+    App\Service\RequestService: ['@request']
+
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
