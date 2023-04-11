@@ -38,6 +38,13 @@ class FormController extends AbstractController
             ->getRepository(Form::class)
             ->find($id);
 
+        if (!$record) {
+            return $this->json([
+                'message' => 'No record found!',
+                'record' => null,
+            ], 400);
+        }
+
         return $this->json([
             'message' => 'Record returned!',
             'record' => $record,
