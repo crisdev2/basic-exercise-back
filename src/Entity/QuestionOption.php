@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\QuestionOptionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: QuestionOptionRepository::class)]
 class QuestionOption
@@ -16,6 +17,7 @@ class QuestionOption
     #[ORM\Column(length: 255)]
     private ?string $label = null;
 
+    #[Ignore()]
     #[ORM\ManyToOne(inversedBy: 'idQuestionOptions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Question $idQuestion = null;

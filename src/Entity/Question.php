@@ -6,6 +6,7 @@ use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question
@@ -28,6 +29,7 @@ class Question
     #[ORM\OneToMany(mappedBy: 'idQuestion', targetEntity: QuestionOption::class, orphanRemoval: true)]
     private Collection $idQuestionOptions;
 
+    #[Ignore()]
     #[ORM\ManyToOne(inversedBy: 'idQuestions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Form $idForm = null;
